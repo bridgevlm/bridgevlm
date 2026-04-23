@@ -1,313 +1,389 @@
 <!DOCTYPE html>
-<html lang=en><head><link href="//fonts.googleapis.com" rel=dns-prefetch /> <meta charset=UTF-8 /> <meta name=viewport content="width=device-width, initial-scale=1.0"/> <title>BridgeVLM: Bridging Vision Signal For VLM Recommendation</title> <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&amp;display=swap" rel=stylesheet /> <style>
-        * {
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BridgeVLM: Bridging Vision-Language Models and Retrieval Encoders for End-to-End Recommendation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box
         }
 
         body {
-            font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
+            font-family: 'Noto Sans', sans-serif;
+            line-height: 1.75;
             color: #333;
-            background: #f5f5f5;
+            background: #fdfdfd
         }
 
-        /* Navigation */
+        a {
+            color: #4285f4;
+            text-decoration: none
+        }
+
+        a:hover {
+            text-decoration: underline
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 0 24px
+        }
+
+        /* Nav */
         nav {
-            background: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            padding: 12px 0
         }
 
         nav .container {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
+            gap: 28px;
+            flex-wrap: wrap
         }
 
         nav a {
-            color: #333;
-            text-decoration: none;
+            color: #555;
             font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-            padding: 5px 0;
+            font-size: .9rem;
+            text-decoration: none;
+            padding: 4px 0;
+            transition: color .2s
         }
 
         nav a:hover {
             color: #4285f4;
+            text-decoration: none
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 40px;
-        }
-
-        /* Hero Section */
+        /* Hero */
         .hero {
-            background: white;
-            padding: 80px 40px 60px 40px;
             text-align: center;
+            padding: 60px 24px 40px;
+            background: #fff
         }
 
-        h1 {
-            font-size: 2.8rem;
+        .hero h1 {
+            font-size: 2.4rem;
             font-weight: 700;
-            margin-bottom: 30px;
             color: #1a1a1a;
-            line-height: 1.2;
+            line-height: 1.25;
+            margin-bottom: 14px
+        }
+
+        .venue-badge {
+            display: inline-block;
+            background: #e8f0fe;
+            color: #1a73e8;
+            font-weight: 600;
+            font-size: .85rem;
+            padding: 4px 14px;
+            border-radius: 4px;
+            margin-bottom: 20px
         }
 
         .authors {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.8;
+            font-size: 1.05rem;
+            color: #444;
+            margin-bottom: 6px;
+            line-height: 1.8
         }
 
         .affiliation {
-            font-size: 1rem;
-            color: #666;
-            margin-bottom: 35px;
-            font-style: italic;
+            font-size: .92rem;
+            color: #777;
+            margin-bottom: 28px;
+            font-style: italic
         }
 
-        .links {
+        /* Buttons */
+        .btn-row {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin-top: 24px
         }
 
-        .links a {
-            background: #4285f4;
-            color: white;
-            padding: 12px 28px;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
             border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: background 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+            font-weight: 600;
+            font-size: .9rem;
+            transition: background .2s, transform .15s;
+            text-decoration: none !important
         }
 
-        .links a:hover {
+        .btn-primary {
+            background: #4285f4;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(66, 133, 244, .3)
+        }
+
+        .btn-primary:hover {
             background: #3367d6;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
+            transform: translateY(-1px)
         }
 
-        /* Main Content Sections */
+        .btn-outline {
+            border: 2px solid #4285f4;
+            color: #4285f4;
+            background: transparent
+        }
+
+        .btn-outline:hover {
+            background: #e8f0fe
+        }
+
+        /* Sections */
         section {
-            background: white;
-            margin: 40px auto;
-            padding: 60px 40px;
+            padding: 56px 0
         }
 
         section:nth-child(even) {
-            background: #fafafa;
+            background: #f8f9fa
         }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 30px;
-            color: #1a1a1a;
+        .section-title {
+            font-size: 1.6rem;
             font-weight: 700;
+            color: #1a1a1a;
             text-align: center;
+            margin-bottom: 28px;
             position: relative;
-            padding-bottom: 20px;
+            padding-bottom: 14px
         }
 
-        h2:after {
+        .section-title::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 80px;
+            width: 60px;
             height: 3px;
             background: #4285f4;
+            border-radius: 2px
         }
 
-        .section-description {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #555;
-            margin-bottom: 40px;
+        /* Abstract */
+        .abstract-text {
+            font-size: 1.02rem;
+            line-height: 1.85;
+            color: #444;
+            text-align: justify;
+            max-width: 860px;
+            margin: 0 auto
+        }
+
+        /* Figures */
+        .figure-block {
             text-align: center;
-            max-width: 900px;
+            margin: 40px 0
+        }
+
+        .figure-block img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .08)
+        }
+
+        .figure-caption {
+            font-size: .88rem;
+            color: #666;
+            margin-top: 12px;
+            max-width: 780px;
             margin-left: auto;
             margin-right: auto;
+            line-height: 1.6
         }
 
-        /* Code Section */
-        .code-container {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-            margin-top: 30px;
-        }
-
-        .code-header {
-            background: #f8f8f8;
-            padding: 12px 20px;
-            border-bottom: 1px solid #e0e0e0;
-            font-weight: 600;
-            color: #555;
-            font-size: 0.9rem;
-        }
-
-        .code-section {
-            background: #1e1e1e;
-            padding: 30px;
+        /* Tables */
+        .table-wrapper {
             overflow-x: auto;
+            margin: 30px 0
         }
 
-        .code-section pre {
-            margin: 0;
-            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
-            font-size: 14px;
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+            text-align: center
+        }
+
+        .results-table th {
+            background: #4285f4;
+            color: #fff;
+            padding: 10px 8px;
+            font-weight: 600;
+            white-space: nowrap
+        }
+
+        .results-table td {
+            padding: 8px;
+            border-bottom: 1px solid #e8e8e8
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none
+        }
+
+        .results-table tr:hover td {
+            background: #f0f4ff
+        }
+
+        .results-table .highlight td {
+            background: #e8f0fe;
+            font-weight: 600
+        }
+
+        .results-table .section-header td {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-style: italic;
+            text-align: left;
+            padding-left: 12px
+        }
+
+        .table-caption {
+            font-size: .88rem;
+            color: #555;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 500
+        }
+
+        /* Pseudocode */
+        .pseudocode-box {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            border-radius: 8px;
+            padding: 28px 32px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: .82rem;
             line-height: 1.8;
-            color: #d4d4d4;
+            overflow-x: auto;
+            margin: 30px 0;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .15);
+            white-space: pre-wrap
         }
 
-        .comment {
-            color: #6a9955;
+        .pseudocode-box pre {
+            margin: 0;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+            color: inherit;
+            background: transparent;
+            white-space: pre;
+            overflow-x: auto
         }
 
-        .keyword {
-            color: #569cd6;
+        .pseudocode-box .cmt {
+            color: #6c7086
         }
 
-        .function {
-            color: #dcdcaa;
+        .pseudocode-box .vr {
+            color: #f9e2af
         }
 
-        .string {
-            color: #ce9178;
+        .pseudocode-box .fn {
+            color: #89b4fa
         }
 
-        .number {
-            color: #b5cea8;
-        }
-
-        .variable {
-            color: #9cdcfe;
-        }
-
-        .operator {
-            color: #d4d4d4;
+        .pseudocode-box .st {
+            color: #a6e3a1
         }
 
         /* Gallery */
         .gallery {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin: 30px 0
         }
 
         .gallery-item {
-            background: white;
-            border: 1px solid #e0e0e0;
+            background: #fff;
+            border: 1px solid #e8e8e8;
             border-radius: 8px;
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform .2s, box-shadow .2s
         }
 
         .gallery-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .1)
         }
 
         .gallery-item img {
             width: 100%;
             height: auto;
-            display: block;
+            display: block
         }
 
         .gallery-item-caption {
-            padding: 20px;
+            padding: 14px;
             text-align: center;
             font-weight: 500;
             color: #555;
-            background: #fafafa;
+            font-size: .88rem;
+            background: #fafafa
         }
 
-        /* Dataset Cards */
-        .dataset-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .dataset-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            padding: 35px;
+        /* BibTeX */
+        .bibtex-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            text-decoration: none;
-            display: block;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dataset-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #4285f4, #34a853);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .dataset-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-            border-color: #4285f4;
-        }
-
-        .dataset-card:hover:before {
-            transform: scaleX(1);
-        }
-
-        .dataset-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .dataset-card p {
-            font-size: 1rem;
+            padding: 20px 24px;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: .8rem;
             line-height: 1.7;
-            color: #666;
+            overflow-x: auto;
+            position: relative;
+            max-width: 700px;
+            margin: 20px auto 0
         }
 
-        .dataset-badge {
-            display: inline-block;
-            background: #e8f0fe;
-            color: #4285f4;
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #4285f4;
+            color: #fff;
+            border: none;
             padding: 5px 12px;
             border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
+            cursor: pointer;
+            font-size: .75rem;
+            font-weight: 600
+        }
+
+        .copy-btn:hover {
+            background: #3367d6
         }
 
         /* Footer */
@@ -315,49 +391,861 @@
             background: #1a1a1a;
             color: #999;
             text-align: center;
-            padding: 40px 20px;
-            font-size: 0.9rem;
+            padding: 30px 20px;
+            font-size: .85rem
         }
 
         footer a {
-            color: #4285f4;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
+            color: #89b4fa
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            .container {
-                padding: 0 20px;
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 1.7rem
             }
 
             section {
-                padding: 40px 20px;
+                padding: 36px 0
             }
 
-            .hero {
-                padding: 50px 20px 40px 20px;
-            }
-
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-
-            .dataset-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav .container {
-                gap: 20px;
+            .results-table {
+                font-size: .72rem
             }
         }
     </style>
 </head>
-<body> <!-- Navigation --> <nav> <div class=container> <a href="#home">Home</a> <a href="#overview">Overview</a> <a href="#code">Implementation</a> <a href="#results">Results</a> </div> </nav> <!-- Hero Section --> <div class=hero id=home> <div class=container> <h1>BridgeVLM: Bridging Vision Signal For VLM Recommendation</h1> <p class=authors>Research Team</p> <p class=affiliation>Institution / Research Lab</p> <p class=section-description> A novel vision-language model architecture fine-tuned end-to-end for integrated query generation and image retrieval in e-commerce and fashion recommendation systems. </p> <div class=links> <a href="#overview">Paper</a> <a href="#code">Code</a> <a href="#results">Results</a> </div> </div> </div> <!-- Section 1: Overview --> <section id=overview> <div class=container> <h2>Overview</h2> <p class=section-description> BridgeVLM introduces a novel approach to bridge Vision Language Models with CLIP embeddings for enhanced image retrieval in e-commerce and fashion recommendation tasks. </p> <div style="margin: 50px 0;"> <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: #1a1a1a; font-weight: 600;">Motivation</h3> <div style="text-align: center; margin: 30px 0;"> <img src="figures/motivation.png" alt="BridgeVLM Motivation" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);"/> </div> </div> <div style="margin: 50px 0;"> <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: #1a1a1a; font-weight: 600;">Architecture</h3> <div style="text-align: center; margin: 30px 0;"> <img src="figures/model.png" alt="BridgeVLM Architecture" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);"/> </div> </div> <div style="margin: 50px 0;"> <h3 style="font-size: 1.5rem; margin-bottom: 20px; color: #1a1a1a; font-weight: 600;">System Overview</h3> <div style="text-align: center; margin: 30px 0;"> <img src="figures/overview.png" alt="BridgeVLM System Overview" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);"/> </div> </div> </div> </section> <!-- Section 2: Code --> <section id=code> <div class=container> <h2>Implementation Code</h2> <p class=section-description> BridgeVLM bridges Vision Language Models (VLM) with CLIP embeddings through learnable query tokens and cross-attention mechanisms. The algorithm processes anchor images through a VLM, refines queries via transformer decoder, and projects to CLIP space for contrastive learning with ground truth images. </p> <div class=code-container> <div class=code-header>Algorithm 1: Forward Pass for VLM-CLIP Retrieval</div> <div class=code-section> <pre><span class=comment>VLM-CLIP Bridge</span>
+
+<body>
+
+    <!-- ==================== Navigation ==================== -->
+    <nav>
+        <div class="container">
+            <a href="#abstract">Abstract</a>
+            <a href="#method">Method</a>
+            <a href="#results">Results</a>
+            <a href="#qualitative">Qualitative</a>
+            <a href="#code">Code</a>
+            <a href="#citation">Citation</a>
+        </div>
+    </nav>
+
+    <!-- ==================== Hero ==================== -->
+    <div class="hero" id="home">
+        <div class="container">
+            <span class="venue-badge">RecSys 2026</span>
+            <h1>BridgeVLM: Bridging Vision&#8211;Language Models and<br />Retrieval Encoders for End-to-End
+                Recommendation</h1>
+            <p class="authors">Anonymous Authors</p>
+            <p class="affiliation">Under Review</p>
+            <div class="btn-row">
+                <a class="btn btn-primary" href="static/RecSys_2026_paper_568_appendix.pdf" target="_blank"><i
+                        class="fas fa-file-alt"></i> Appendix</a>
+                <a class="btn btn-outline" href="https://github.com/bridgevlm/bridgevlm" target="_blank"><i
+                        class="fab fa-github"></i> Code</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== Abstract ==================== -->
+    <section id="abstract">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <p class="abstract-text">
+                Visual recommendation requires retrieving items that match diverse user
+                intents&#8212;from finding similar products to completing an outfit with
+                complementary pieces. Recent multimodal embedding models (VLM2Vec, LamRA,
+                MME5) learn a single embedding space optimized for similarity; they retrieve
+                near-duplicate items effectively but collapse when the task demands
+                cross-category complements, yielding Recall@K roughly 10&#215; lower on
+                complementary benchmarks. In practice, these models also define their own
+                embedding space, preventing reuse of retrieval indices already deployed in
+                production. The common alternative&#8212;two-stage pipelines where a large
+                VLM (e.g., GPT-4o) verbalizes an image into a text query and a separate
+                retrieval encoder (e.g., CLIP, SigLIP) performs nearest-neighbor
+                search&#8212;suffers from modality misalignment: the generator and retriever
+                are optimized independently, so generated queries drift from the optimal
+                retrieval space.
+            </p>
+            <br />
+            <p class="abstract-text">
+                We introduce <strong>BridgeVLM</strong>, a compact vision&#8211;language
+                architecture that closes this gap through a differentiable <em>retrieval
+                    bridge</em>. The bridge maps VLM decoder hidden states directly into the
+                embedding space of a frozen, pre-trained retrieval encoder via learnable
+                query vectors, transformer-based refinement, and cross-model projection.
+                Critically, the bridge is <strong>encoder-agnostic</strong>: it can target
+                any frozen retrieval model&#8212;CLIP, Fashion-CLIP, SigLIP, or a
+                domain-specific encoder&#8212;preserving compatibility with existing indexed
+                catalogs without re-indexing. A multi-objective loss combining contrastive
+                retrieval (InfoNCE) and autoregressive language modeling jointly optimizes
+                retrieval accuracy and language fluency. We evaluate on two core
+                tasks&#8212;Complete the Look (CTL) and Similar Item (SI)
+                recommendation&#8212;across multiple public benchmarks. Despite being
+                &#8776;200&#215; smaller than frontier VLMs, BridgeVLM achieves
+                state-of-the-art Recall@K on both similarity <em>and</em> complementary
+                retrieval, outperforming larger VLMs, two-stage baselines, and recent
+                multimodal embedding models, while maintaining rich language generation
+                capability.
+            </p>
+        </div>
+    </section>
+
+    <!-- ==================== Figure 1: Overview ==================== -->
+    <section id="overview">
+        <div class="container">
+            <h2 class="section-title">Overview</h2>
+            <div class="figure-block">
+                <img src="figures/bridge_overview_2.jpeg" alt="BridgeVLM Overview" />
+                <!-- OLD caption (corresponds to fig1.png, not this image):
+                <p class="figure-caption">
+                    <strong>Figure 1.</strong> (a) Traditional decoupled item recommendation
+                    using a VLM and a retrieval encoder (e.g., CLIP), where the VLM generates
+                    queries that are then fed into the retrieval system. (b) BridgeVLM links
+                    both the VLM and the retrieval encoder into the same space.
+                    (c) BridgeVLM (red dot) achieves superior retrieval performance compared
+                    to other methods with 200&#215; smaller model size.
+                </p> -->
+                <p class="figure-caption">
+                    <strong>Figure 1.</strong> Overview of BridgeVLM. Given an anchor image
+                    and a text prompt, a multimodal fused encoder produces joint hidden
+                    states. BridgeVLM extracts retrieval-aligned query embeddings via
+                    learnable queries refined through a cross-attention decoder and
+                    cross-modal projection. The attended queries are matched against a
+                    pre-indexed image gallery using a frozen retrieval model, returning a
+                    ranked set of recommended items. The entire pipeline is trained
+                    end-to-end, allowing retrieval supervision to flow back into the encoder.
+                </p>
+            </div>
+
+            <div class="figure-block" style="margin-top:40px;">
+                <img src="figures/fig1.png" alt="BridgeVLM vs two-stage pipelines" />
+                <p class="figure-caption">
+                    <strong>Figure 2.</strong> (a) Traditional decoupled item recommendation
+                    using a VLM and a retrieval encoder (e.g., CLIP), where the VLM generates
+                    queries that are then fed into the retrieval system. (b) BridgeVLM links
+                    both the VLM and the retrieval encoder into the same space.
+                    (c) BridgeVLM (red dot) achieves superior retrieval performance compared
+                    to other methods with 200&#215; smaller model size.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Method ==================== -->
+    <section id="method">
+        <div class="container">
+            <h2 class="section-title">Method</h2>
+
+            <p style="text-align:center;max-width:860px;margin:0 auto 16px;color:#555;font-size:.98rem;">
+                BridgeVLM is an end-to-end vision&#8211;language model that unifies
+                language generation and image retrieval within a single architecture.
+                Unlike two-stage pipelines, BridgeVLM introduces a differentiable
+                retrieval bridge that aligns multimodal generation and retrieval in the
+                retrieval model&#8217;s embedding space. The bridge is encoder-agnostic
+                and applies to any frozen dual encoder.
+            </p>
+
+            <!-- Architecture -->
+            <div class="figure-block">
+                <img src="figures/bridge-arch.png" alt="BridgeVLM Model Architecture" />
+                <p class="figure-caption">
+                    <strong>Figure 3.</strong> BridgeVLM Model Architecture. The VLM backbone
+                    processes the anchor image and text prompt. The retrieval bridge extracts
+                    learnable query vectors via a transformer decoder cross-attending to VLM
+                    hidden states, then projects them through the frozen retrieval
+                    encoder&#8217;s text encoder into the shared embedding space.
+                </p>
+            </div>
+
+            <!-- Key Components -->
+            <div style="max-width:860px;margin:40px auto 0;font-size:.95rem;color:#444;">
+                <h3 style="font-size:1.15rem;font-weight:600;color:#1a1a1a;margin-bottom:10px;">Key Components</h3>
+                <ul style="padding-left:20px;line-height:2.0;">
+                    <li><strong>VLM Backbone:</strong> InternVL3-2B with a frozen vision
+                        encoder. The anchor image is tokenized into patch features and projected
+                        into the LLM token space via a two-layer MLP.</li>
+                    <li><strong>Retrieval Bridge:</strong> A set of <em>N</em> learnable query
+                        vectors refined through a 2-layer transformer decoder with cross-attention
+                        to VLM hidden states, then projected via a linear layer.</li>
+                    <li><strong>Retrieval Model:</strong> The projected queries are processed
+                        through the frozen retrieval encoder&#8217;s text encoder (e.g.,
+                        Fashion-CLIP) to produce embeddings in the shared text&#8211;image
+                        space.</li>
+                    <li><strong>Training Loss:</strong> A multi-objective loss combining
+                        next-token cross-entropy (language fluency) with InfoNCE contrastive loss
+                        (retrieval alignment).</li>
+                </ul>
+            </div>
+
+            <!-- Two Tasks -->
+            <div class="figure-block" style="margin-top:44px;">
+                <img src="figures/TwoTasksv7.png" alt="CTL and SI retrieval examples" style="max-width:85%;" />
+                <p class="figure-caption">
+                    <strong>Figure 4.</strong> Examples of vision-based retrieval by BridgeVLM.
+                    First row: &#8220;Complete the Look&#8221; (CTL)&#8212;given an anchor,
+                    retrieve complementary items. Second row: &#8220;Similar Item&#8221;
+                    (SI)&#8212;retrieve visually similar products.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Results ==================== -->
+    <section id="results">
+        <div class="container">
+            <h2 class="section-title">Results</h2>
+
+            <!-- ===== CTL Table ===== -->
+            <p class="table-caption">
+                <strong>Table 1.</strong> Performance on Complete-the-Look (CTL) datasets.
+                <strong>Bold</strong> = best overall;
+                <u>underline</u> = best among small models (&lt;8B).
+            </p>
+            <div class="table-wrapper">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="text-align:left">Model</th>
+                            <th rowspan="2">Ret.</th>
+                            <th colspan="2">Polyvore</th>
+                            <th colspan="2">Walmart Fashion</th>
+                            <th colspan="2">Walmart Home</th>
+                            <th colspan="2">Pinterest</th>
+                        </tr>
+                        <tr>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="section-header">
+                            <td colspan="10">Zero-shot two-stage baselines</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">LLaVA-1.5</td>
+                            <td>CLIP</td>
+                            <td>0.0014</td>
+                            <td>0.0075</td>
+                            <td>0.0055</td>
+                            <td>0.0446</td>
+                            <td>0.0048</td>
+                            <td>0.0373</td>
+                            <td>0.0052</td>
+                            <td>0.0297</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0019</td>
+                            <td>0.0071</td>
+                            <td>0.0097</td>
+                            <td>0.0615</td>
+                            <td>0.0054</td>
+                            <td>0.0464</td>
+                            <td>0.0057</td>
+                            <td>0.0290</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">LLaVA-1.6</td>
+                            <td>CLIP</td>
+                            <td>0.0023</td>
+                            <td>0.0113</td>
+                            <td>0.0130</td>
+                            <td>0.0700</td>
+                            <td>0.0044</td>
+                            <td>0.0367</td>
+                            <td>0.0080</td>
+                            <td>0.0431</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0025</td>
+                            <td>0.0113</td>
+                            <td>0.0190</td>
+                            <td>0.0871</td>
+                            <td>0.0034</td>
+                            <td>0.0389</td>
+                            <td>0.0072</td>
+                            <td>0.0417</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-2B</td>
+                            <td>CLIP</td>
+                            <td>0.0006</td>
+                            <td>0.0071</td>
+                            <td>0.0108</td>
+                            <td>0.0532</td>
+                            <td>0.0048</td>
+                            <td>0.0351</td>
+                            <td>0.0058</td>
+                            <td>0.0363</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0008</td>
+                            <td>0.0063</td>
+                            <td>0.0136</td>
+                            <td>0.0698</td>
+                            <td>0.0042</td>
+                            <td>0.0413</td>
+                            <td>0.0060</td>
+                            <td>0.0327</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-8B</td>
+                            <td>CLIP</td>
+                            <td>0.0019</td>
+                            <td>0.0111</td>
+                            <td>0.0113</td>
+                            <td>0.0705</td>
+                            <td>0.0036</td>
+                            <td>0.0287</td>
+                            <td>0.0080</td>
+                            <td>0.0427</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0022</td>
+                            <td>0.0122</td>
+                            <td>0.0181</td>
+                            <td>0.0845</td>
+                            <td>0.0043</td>
+                            <td>0.0350</td>
+                            <td>0.0063</td>
+                            <td>0.0445</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">GPT-4o</td>
+                            <td>CLIP</td>
+                            <td>0.0018</td>
+                            <td>0.0108</td>
+                            <td>0.0225</td>
+                            <td>0.0953</td>
+                            <td>0.0068</td>
+                            <td>0.0538</td>
+                            <td><b>0.0125</b></td>
+                            <td><b>0.0702</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0020</td>
+                            <td>0.0115</td>
+                            <td>0.0285</td>
+                            <td>0.1118</td>
+                            <td>0.0078</td>
+                            <td>0.0664</td>
+                            <td>0.0119</td>
+                            <td>0.0673</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">Gemini 2.5 Pro</td>
+                            <td>CLIP</td>
+                            <td>0.0000</td>
+                            <td>0.0017</td>
+                            <td>0.0013</td>
+                            <td>0.0178</td>
+                            <td>0.0012</td>
+                            <td>0.0105</td>
+                            <td>0.0011</td>
+                            <td>0.0166</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.0003</td>
+                            <td>0.0023</td>
+                            <td>0.0009</td>
+                            <td>0.0166</td>
+                            <td>0.0018</td>
+                            <td>0.0175</td>
+                            <td>0.0014</td>
+                            <td>0.0165</td>
+                        </tr>
+
+                        <tr class="section-header">
+                            <td colspan="10">Fine-tuned two-stage baseline</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-2B (SFT)</td>
+                            <td>FCLIP</td>
+                            <td>0.0011</td>
+                            <td>0.0094</td>
+                            <td>0.0395</td>
+                            <td>0.1340</td>
+                            <td>0.0218</td>
+                            <td>0.1490</td>
+                            <td>0.0020</td>
+                            <td>0.0130</td>
+                        </tr>
+
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>BridgeVLM (ours)</b></td>
+                            <td>FCLIP</td>
+                            <td><u><b>0.0027</b></u></td>
+                            <td><u><b>0.0165</b></u></td>
+                            <td><u><b>0.1256</b></u></td>
+                            <td><u><b>0.2369</b></u></td>
+                            <td><u><b>0.1191</b></u></td>
+                            <td><u><b>0.2651</b></u></td>
+                            <td><u><b>0.0079</b></u></td>
+                            <td><u><b>0.0484</b></u></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ===== SI Table ===== -->
+            <p class="table-caption" style="margin-top:40px;">
+                <strong>Table 2.</strong> Performance on Similar Item (SI) datasets.
+                <strong>Bold</strong> = best overall;
+                <u>underline</u> = best among small models (&lt;8B).
+            </p>
+            <div class="table-wrapper">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="text-align:left">Model</th>
+                            <th rowspan="2">Ret.</th>
+                            <th colspan="2">Walmart Fashion</th>
+                            <th colspan="2">Walmart Home</th>
+                            <th colspan="2">Google Shopping</th>
+                        </tr>
+                        <tr>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="section-header">
+                            <td colspan="8">Zero-shot two-stage baselines</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">LLaVA-1.5</td>
+                            <td>CLIP</td>
+                            <td>0.1366</td>
+                            <td>0.4070</td>
+                            <td>0.1051</td>
+                            <td>0.3573</td>
+                            <td>0.1311</td>
+                            <td>0.3943</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.2100</td>
+                            <td>0.4954</td>
+                            <td>0.1771</td>
+                            <td>0.4654</td>
+                            <td>0.2172</td>
+                            <td>0.5190</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">LLaVA-1.6</td>
+                            <td>CLIP</td>
+                            <td>0.2698</td>
+                            <td>0.6519</td>
+                            <td>0.2163</td>
+                            <td>0.5613</td>
+                            <td>0.2747</td>
+                            <td>0.6461</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.3660</td>
+                            <td>0.7703</td>
+                            <td>0.3280</td>
+                            <td>0.6899</td>
+                            <td>0.4159</td>
+                            <td>0.7917</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-2B</td>
+                            <td>CLIP</td>
+                            <td>0.2477</td>
+                            <td>0.5596</td>
+                            <td>0.2223</td>
+                            <td>0.5842</td>
+                            <td>0.2437</td>
+                            <td>0.5870</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.3721</td>
+                            <td>0.6900</td>
+                            <td>0.3888</td>
+                            <td>0.7318</td>
+                            <td>0.4124</td>
+                            <td>0.7332</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-8B</td>
+                            <td>CLIP</td>
+                            <td>0.2791</td>
+                            <td>0.6606</td>
+                            <td>0.1969</td>
+                            <td>0.6030</td>
+                            <td>0.4062</td>
+                            <td>0.7713</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.4347</td>
+                            <td>0.7891</td>
+                            <td>0.3718</td>
+                            <td>0.7467</td>
+                            <td>0.6088</td>
+                            <td>0.9054</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">GPT-4o</td>
+                            <td>CLIP</td>
+                            <td>0.2283</td>
+                            <td>0.6220</td>
+                            <td>0.2633</td>
+                            <td>0.6419</td>
+                            <td>0.3000</td>
+                            <td>0.6540</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.4606</td>
+                            <td>0.8267</td>
+                            <td>0.5226</td>
+                            <td>0.8847</td>
+                            <td>0.5920</td>
+                            <td>0.8880</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">Gemini 2.5 Pro</td>
+                            <td>CLIP</td>
+                            <td>0.1153</td>
+                            <td>0.4807</td>
+                            <td>0.1458</td>
+                            <td>0.4791</td>
+                            <td>0.2240</td>
+                            <td>0.5880</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left"></td>
+                            <td>FCLIP</td>
+                            <td>0.3076</td>
+                            <td>0.7884</td>
+                            <td>0.4791</td>
+                            <td>0.7916</td>
+                            <td>0.5100</td>
+                            <td>0.8520</td>
+                        </tr>
+
+                        <tr class="section-header">
+                            <td colspan="8">Fine-tuned two-stage baseline</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-2B (SFT)</td>
+                            <td>FCLIP</td>
+                            <td>0.4100</td>
+                            <td>0.7600</td>
+                            <td>0.5000</td>
+                            <td>0.8500</td>
+                            <td>0.4830</td>
+                            <td>0.8060</td>
+                        </tr>
+
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>BridgeVLM (ours)</b></td>
+                            <td>FCLIP</td>
+                            <td><u><b>0.9117</b></u></td>
+                            <td><u><b>0.9970</b></u></td>
+                            <td><u><b>0.9282</b></u></td>
+                            <td><u><b>0.9970</b></u></td>
+                            <td><u><b>0.9450</b></u></td>
+                            <td><u><b>0.9975</b></u></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ===== MMEB Comparison ===== -->
+            <div style="margin-top:48px;">
+                <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin-bottom:16px;">MMEB
+                    Models on CTL</h3>
+                <p
+                    style="text-align:center;max-width:780px;margin:0 auto 20px;color:#555;font-size:.92rem;line-height:1.7;">
+                    Recent multimodal embedding models from the MMEB benchmark&#8212;LamRA,
+                    MME5, and VLM2Vec&#8212;predominantly retrieve items that are
+                    <em>visually similar</em> to the anchor rather than <em>complementary</em>
+                    cross-category items required by CTL. Their Recall@K on CTL is
+                    approximately 10&#215; lower than BridgeVLM.
+                </p>
+                <div class="figure-block">
+                    <img src="figures/rebuttal2.png" alt="MMEB model comparison" style="max-width:70%;" />
+                    <p class="figure-caption">
+                        <strong>Figure 5.</strong> CTL comparison between MMEB retrieval models
+                        (LamRA, MME5, VLM2Vec) and BridgeVLM. MMEB models retrieve visually
+                        similar items (more handbags), while BridgeVLM retrieves cross-category
+                        complementary items.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ===== Ablation Table (COMMENTED OUT) =====
+            <p class="table-caption" style="margin-top:48px;">
+                <strong>Table 3.</strong> Ablation study: retrieval backbone, bridge
+                architecture, and training configuration.
+            </p>
+            <div class="table-wrapper">
+                <table class="results-table" style="max-width:700px;margin:0 auto;">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left">Variant</th>
+                            <th colspan="2">Pinterest (CTL)</th>
+                            <th colspan="2">Google (SI)</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                            <th>R@10</th>
+                            <th>R@100</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="section-header">
+                            <td colspan="5">Retrieval Backbone</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">CLIP</td>
+                            <td>0.0054</td>
+                            <td>0.0360</td>
+                            <td>0.7665</td>
+                            <td>0.9710</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">CLIP-Large</td>
+                            <td>0.0048</td>
+                            <td>0.0320</td>
+                            <td>0.8465</td>
+                            <td>0.9780</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>FCLIP (ours)</b></td>
+                            <td><b>0.0079</b></td>
+                            <td><b>0.0484</b></td>
+                            <td><b>0.9450</b></td>
+                            <td><b>0.9975</b></td>
+                        </tr>
+
+                        <tr class="section-header">
+                            <td colspan="5">Bridge Architecture</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">Single-layer attention</td>
+                            <td>0.0049</td>
+                            <td>0.0389</td>
+                            <td>0.8885</td>
+                            <td>0.9945</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>Transformer decoder (ours)</b></td>
+                            <td><b>0.0079</b></td>
+                            <td><b>0.0484</b></td>
+                            <td><b>0.9450</b></td>
+                            <td><b>0.9975</b></td>
+                        </tr>
+
+                        <tr class="section-header">
+                            <td colspan="5">Training</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">Unfreeze FCLIP</td>
+                            <td>0.0046</td>
+                            <td>0.0298</td>
+                            <td>0.6235</td>
+                            <td>0.8915</td>
+                        </tr>
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>BridgeVLM (ours)</b></td>
+                            <td><b>0.0079</b></td>
+                            <td><b>0.0484</b></td>
+                            <td><b>0.9450</b></td>
+                            <td><b>0.9975</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            ===== END Ablation Table ===== -->
+
+            <!-- ===== Training Curves (COMMENTED OUT) =====
+            <div style="margin-top:48px;">
+                <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin-bottom:16px;">
+                    Training Dynamics</h3>
+                <div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;">
+                    <div class="figure-block" style="flex:1;min-width:280px;max-width:420px;">
+                        <img src="figures/loss_curves_cvpr.png" alt="Loss components" />
+                        <p class="figure-caption"><strong>(a)</strong> Training loss convergence.</p>
+                    </div>
+                    <div class="figure-block" style="flex:1;min-width:280px;max-width:420px;">
+                        <img src="figures/loss_comparison_cvpr.png" alt="Model comparison" />
+                        <p class="figure-caption"><strong>(b)</strong> Loss comparison across model variants.</p>
+                    </div>
+                </div>
+                <p class="figure-caption" style="margin-top:8px;">
+                    <strong>Figure 5.</strong> BridgeVLM exhibits accelerated and stable
+                    training convergence. (a) Loss decreases consistently from ~2.0 to below
+                    0.5. (b) Full BridgeVLM achieves superior convergence compared to ablated
+                    variants.
+                </p>
+            </div>
+            ===== END Training Curves ===== -->
+        </div>
+    </section>
+
+    <!-- ==================== Qualitative Results ==================== -->
+    <section id="qualitative">
+        <div class="container">
+            <h2 class="section-title">Qualitative Results</h2>
+
+            <div class="figure-block">
+                <img src="figures/casestudyv8.png" alt="CTL case study" />
+                <p class="figure-caption">
+                    <strong>Figure 6.</strong> &#8220;Complete the Look&#8221; recommendations
+                    by BridgeVLM for men&#8217;s fashion categories. BridgeVLM retrieves type-
+                    and occasion-aware complements that maintain palette coherence and
+                    diversify across garments, footwear, and accessories.
+                </p>
+            </div>
+
+            <div class="figure-block" style="margin-top:40px;">
+                <img src="figures/BenchmarkExamplev3.png" alt="Benchmark comparison" style="max-width:72%;" />
+                <p class="figure-caption">
+                    <strong>Figure 7.</strong> &#8220;Complete the Look&#8221; comparison across
+                    models for a toddler sweatshirt anchor. Baselines exhibit age/fit
+                    mismatch, object-class drift, and duplicate retrieval. BridgeVLM produces
+                    an age-appropriate, coherent set.
+                </p>
+            </div>
+
+            <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin:48px 0 20px;">More Case
+                Studies (Appendix)</h3>
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="figures/BridgeVLM%20Example1v2.png" alt="CTL Kids" />
+                    <div class="gallery-item-caption">CTL recommendations for kids&#8217; and infants&#8217; wear</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="figures/BridgeVLM%20Example4v2.png" alt="CTL Women" />
+                    <div class="gallery-item-caption">CTL recommendations for women&#8217;s wear and jewelry</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="figures/BridgeVLM%20Example2v2.png" alt="CTL Men" />
+                    <div class="gallery-item-caption">CTL recommendations for men&#8217;s everyday wear</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Pseudocode ==================== -->
+    <section id="code">
+        <div class="container">
+            <h2 class="section-title">Pseudocode</h2>
+            <p style="text-align:center;color:#555;font-size:.95rem;margin-bottom:20px;">
+                Core forward pass of BridgeVLM&#8217;s training loop.
+            </p>
+            <div class="pseudocode-box">
+                <pre>
+<span class="cmt"># VLM &ndash; Vision Language model (InternVL3-2B)</span>
+<span class="cmt"># CLIP &ndash; Frozen retrieval model (Fashion-CLIP)</span>
+<span class="cmt"># Q_emb[M, d_llm] &ndash; M learnable query vectors</span>
+<span class="cmt"># W_proj[d_llm, d_clip] &ndash; learned projection VLM &rarr; CLIP</span>
+<span class="cmt"># Bridge_Decoder &ndash; 2-layer TransformerDecoder</span>
+<span class="cmt"># I_anchor &ndash; anchor image</span>
+<span class="cmt"># T_prompt &ndash; text prompt</span>
+<span class="cmt"># I_gt[N] &ndash; N ground truth images</span>
+
+<span class="cmt"># &mdash;&mdash; VLM backbone &mdash;&mdash;</span>
+<span class="vr">input_ids</span>, <span class="vr">attn_mask</span>, <span class="vr">labels</span>, <span class="vr">pixels</span> = <span class="fn">VLM_Processor</span>(<span class="vr">I_anchor</span>, <span class="vr">T_prompt</span>)
+<span class="vr">H_vlm</span> = <span class="fn">VLM</span>(<span class="vr">input_ids</span>, <span class="vr">attn_mask</span>, <span class="vr">pixels</span>, <span class="vr">labels</span>)
+<span class="vr">H_dec</span> = <span class="vr">H_vlm</span>[<span class="st">"last_hidden_state"</span>][-1]
+<span class="vr">M_valid</span> = <span class="vr">labels</span> != -100
+
+<span class="cmt"># &mdash;&mdash; Transformer-based refinement &mdash;&mdash;</span>
+<span class="vr">H_att</span> = <span class="fn">Bridge_Decoder</span>(tgt=<span class="vr">Q_emb</span>, memory=<span class="vr">H_dec</span>, memory_mask=<span class="vr">M_valid</span>)
+
+<span class="cmt"># &mdash;&mdash; Cross-model projection &mdash;&mdash;</span>
+<span class="vr">H_clip</span> = <span class="vr">H_att</span> @ <span class="vr">W_proj</span>
+
+<span class="cmt"># &mdash;&mdash; CLIP backbone &mdash;&mdash;</span>
+<span class="vr">E_q</span> = <span class="fn">normalize</span>(<span class="fn">CLIP_text_encoder</span>(<span class="vr">H_clip</span>), dim=-1)
+<span class="vr">E_i</span> = <span class="fn">normalize</span>(<span class="fn">CLIP_vision_encoder</span>(<span class="vr">I_gt</span>), dim=-1)
+
+<span class="cmt"># &mdash;&mdash; Loss &mdash;&mdash;</span>
+<span class="vr">Sim</span> = <span class="vr">E_q</span> @ <span class="vr">E_i</span>.T / &tau;
+<span class="vr">loss_ret</span> = <span class="fn">contrastive_loss</span>(<span class="vr">Sim</span>, <span class="fn">arange</span>(N))
+<span class="vr">loss_ce</span> = <span class="fn">VLM_cross_entropy_loss</span>(<span class="vr">input_ids</span>, <span class="vr">labels</span>)
+<span class="vr">loss</span> = &lambda;_ret * <span class="vr">loss_ret</span> + &lambda;_ce * <span class="vr">loss_ce</span>
+</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Citation ==================== -->
+    <section id="citation" style="background:#fff;">
+        <div class="container">
+            <h2 class="section-title">BibTeX</h2>
+            <div class="bibtex-box" id="bibtex-content">
+                <button class="copy-btn" onclick="copyBibtex()">Copy</button>
+                <pre>@inproceedings{anonymous2026bridgevlm,
+  title     = {BridgeVLM: Bridging Vision--Language Models and
+               Retrieval Encoders for End-to-End Recommendation},
+  author    = {Anonymous},
+  booktitle = {Proceedings of the 20th ACM Conference on
+               Recommender Systems (RecSys)},
+  year      = {2026}
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Footer ==================== -->
+    <footer>
+        <p>
+            BridgeVLM &#169; 2026 &#160;|&#160;
+            <a href="static/RecSys_2026_paper_568_appendix.pdf">Appendix</a> &#160;|&#160;
+            <a href="https://github.com/bridgevlm/bridgevlm">Code</a>
+        </p>
+        <p style="margin-top:8px;font-size:.8rem;">
+            Website template inspired by <a href="https://nerfies.github.io/">Nerfies</a>.
+        </p>
+    </footer>
+
+    <script>
+        function copyBibtex() {
+            var t = document.querySelector('#bibtex-content pre').textContent;
+            navigator.clipboard.writeText(t);
+            var b = document.querySelector('.copy-btn');
+            b.textContent = 'Copied!';
+            setTimeout(function () { b.textContent = 'Copy' }, 2000);
+        }
+    </script>
+
+</body>
+
+</html>
