@@ -424,6 +424,7 @@
             <a href="#abstract">Abstract</a>
             <a href="#method">Method</a>
             <a href="#results">Results</a>
+            <a href="#efficiency">Efficiency</a>
             <a href="#qualitative">Qualitative</a>
             <a href="#code">Code</a>
             <a href="#citation">Citation</a>
@@ -980,6 +981,81 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- ===== Efficiency Table ===== -->
+            <p class="table-caption" style="margin-top:48px;" id="efficiency">
+                <strong>Table 3.</strong> Serving efficiency comparison. BridgeVLM is
+                <strong>33&times; cheaper</strong> than GPT-4o API-based pipelines
+                at production scale. Self-hosted costs use Lambda Labs on-demand pricing:
+                USD 1.99/GPU-hr (A100 40GB) for 2B-scale models and USD 2.79/GPU-hr
+                (A100 80GB) for the 8B baseline. Throughput = token-generation rate
+                (1,600&nbsp;tokens/sec for 3B; 600&nbsp;tokens/sec for 8B, per vLLM
+                A100 benchmarks) &divide; 250 output tokens per query. Cost per 1M queries
+                = (GPU rate &divide; (QPS &times; 3,600)) &times; 1,000,000. VRAM reflects BF16 weight footprint
+                only. API costs computed at standard image + prompt input pricing per
+                OpenAI and Google published rates (accessed June 2026), 250 output
+                tokens per query.
+            </p>
+            <div class="table-wrapper">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left">Model / Pipeline</th>
+                            <th>Params</th>
+                            <th>VRAM&#8202;<sup>†</sup> (BF16)</th>
+                            <th>Latency (P50)</th>
+                            <th>Throughput</th>
+                            <th>Cost / 1M Queries</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight">
+                            <td style="text-align:left"><b>BridgeVLM (Ours)</b></td>
+                            <td>2.3B</td>
+                            <td>4.6 GB</td>
+                            <td>195 ms</td>
+                            <td>6.4 QPS (A100 40GB)</td>
+                            <td><b>$86</b> <span style="font-weight:400;color:#555;">(compute-bound)</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-2B Two-Stage</td>
+                            <td>2.3B + CLIP</td>
+                            <td>4.7 GB</td>
+                            <td>225 ms</td>
+                            <td>5.6 QPS (A100 40GB)</td>
+                            <td>$99 <span style="color:#555;">(compute-bound)</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">InternVL3-8B Two-Stage</td>
+                            <td>8.0B + CLIP</td>
+                            <td>16.1 GB</td>
+                            <td>380 ms</td>
+                            <td>2.4 QPS (A100 80GB)</td>
+                            <td>$323 <span style="color:#555;">(compute-bound)</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">GPT-4o (API)</td>
+                            <td>~1T class</td>
+                            <td>N/A</td>
+                            <td>0.8s&#8203;<sup>*</sup></td>
+                            <td>Provider-scaled</td>
+                            <td>$2,838 <span style="color:#555;">(token-bound)</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">Gemini 2.5 Pro (API)</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A&#8203;<sup>*</sup></td>
+                            <td>Provider-scaled</td>
+                            <td>$2,669 <span style="color:#555;">(token-bound)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="font-size:.80rem;color:#888;margin-top:6px;text-align:center;">
+                <sup>*</sup>GPT-4o P50 TTFT reported as 0.5–0.8s (Artificial Analysis, June 2026; n=1,000 requests). Gemini 2.5 Pro: thinking tokens are mandatory and non-configurable; median TTFT measured at 24.1s (Artificial Analysis, June 2026). &nbsp;
+                <sup>†</sup>VRAM = BF16 weight footprint only (params &times; 2&nbsp;bytes). Peak allocated VRAM during inference including KV&#8202;cache and activations is higher.
+            </p>
 
             <!-- ===== MMEB Comparison ===== -->
             <div style="margin-top:48px;">
