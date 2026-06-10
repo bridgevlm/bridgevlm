@@ -427,6 +427,7 @@
             <a href="#efficiency">Efficiency</a>
             <a href="#qualitative">Qualitative</a>
             <a href="#code">Code</a>
+            <a href="#prompts">Prompts</a>
             <a href="#citation">Citation</a>
         </div>
     </nav>
@@ -982,8 +983,32 @@
                 </table>
             </div>
 
+            <!-- ===== MMEB Comparison ===== -->
+            <div style="margin-top:48px;">
+                <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin-bottom:16px;">MMEB
+                    Models on CTL</h3>
+                <p
+                    style="text-align:center;max-width:780px;margin:0 auto 20px;color:#555;font-size:.92rem;line-height:1.7;">
+                    Recent multimodal embedding models from the MMEB benchmark&#8212;LamRA,
+                    MME5, and VLM2Vec&#8212;predominantly retrieve items that are
+                    <em>visually similar</em> to the anchor rather than <em>complementary</em>
+                    cross-category items required by CTL. Their Recall@K on CTL is
+                    approximately 10&#215; lower than BridgeVLM.
+                </p>
+                <div class="figure-block">
+                    <img src="figures/rebuttal2.png" alt="MMEB model comparison" style="max-width:70%;" />
+                    <p class="figure-caption">
+                        <strong>Figure 5.</strong> CTL comparison between MMEB retrieval models
+                        (LamRA, MME5, VLM2Vec) and BridgeVLM. MMEB models retrieve visually
+                        similar items (more handbags), while BridgeVLM retrieves cross-category
+                        complementary items.
+                    </p>
+                </div>
+            </div>
+
             <!-- ===== Efficiency Table ===== -->
-            <p class="table-caption" style="margin-top:48px;" id="efficiency">
+            <h2 class="section-title" id="efficiency" style="margin-top:56px;">Efficiency</h2>
+            <p class="table-caption" style="margin-top:0;" id="efficiency-table">
                 <strong>Table 3.</strong> Serving efficiency comparison. BridgeVLM is
                 <strong>33&times; cheaper</strong> than GPT-4o API-based pipelines
                 at production scale. Self-hosted costs use Lambda Labs on-demand pricing:
@@ -1056,29 +1081,6 @@
                 <sup>*</sup>GPT-4o P50 TTFT reported as 0.5–0.8s (Artificial Analysis, June 2026; n=1,000 requests). Gemini 2.5 Pro: thinking tokens are mandatory and non-configurable; median TTFT measured at 24.1s (Artificial Analysis, June 2026). &nbsp;
                 <sup>†</sup>VRAM = BF16 weight footprint only (params &times; 2&nbsp;bytes). Peak allocated VRAM during inference including KV&#8202;cache and activations is higher.
             </p>
-
-            <!-- ===== MMEB Comparison ===== -->
-            <div style="margin-top:48px;">
-                <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin-bottom:16px;">MMEB
-                    Models on CTL</h3>
-                <p
-                    style="text-align:center;max-width:780px;margin:0 auto 20px;color:#555;font-size:.92rem;line-height:1.7;">
-                    Recent multimodal embedding models from the MMEB benchmark&#8212;LamRA,
-                    MME5, and VLM2Vec&#8212;predominantly retrieve items that are
-                    <em>visually similar</em> to the anchor rather than <em>complementary</em>
-                    cross-category items required by CTL. Their Recall@K on CTL is
-                    approximately 10&#215; lower than BridgeVLM.
-                </p>
-                <div class="figure-block">
-                    <img src="figures/rebuttal2.png" alt="MMEB model comparison" style="max-width:70%;" />
-                    <p class="figure-caption">
-                        <strong>Figure 5.</strong> CTL comparison between MMEB retrieval models
-                        (LamRA, MME5, VLM2Vec) and BridgeVLM. MMEB models retrieve visually
-                        similar items (more handbags), while BridgeVLM retrieves cross-category
-                        complementary items.
-                    </p>
-                </div>
-            </div>
 
             <!-- ===== Ablation Table (COMMENTED OUT) =====
             <p class="table-caption" style="margin-top:48px;">
@@ -1219,19 +1221,56 @@
 
             <h3 style="text-align:center;font-size:1.15rem;font-weight:600;color:#1a1a1a;margin:48px 0 20px;">More Case
                 Studies (Appendix)</h3>
-            <div class="gallery">
-                <div class="gallery-item">
-                    <img src="figures/BridgeVLM%20Example1v2.png" alt="CTL Kids" />
-                    <div class="gallery-item-caption">CTL recommendations for kids&#8217; and infants&#8217; wear</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="figures/BridgeVLM%20Example4v2.png" alt="CTL Women" />
-                    <div class="gallery-item-caption">CTL recommendations for women&#8217;s wear and jewelry</div>
-                </div>
-                <div class="gallery-item">
-                    <img src="figures/BridgeVLM%20Example2v2.png" alt="CTL Men" />
-                    <div class="gallery-item-caption">CTL recommendations for men&#8217;s everyday wear</div>
-                </div>
+
+            <div class="figure-block">
+                <img src="figures/BridgeVLM%20Example1v2.png" alt="CTL Kids and Infants" />
+                <p class="figure-caption">
+                    <strong>Figure 8.</strong> <strong>&#8220;Complete the Look&#8221; recommendations for kids&#8217; and infants&#8217; wear.</strong>
+                    In the first row, given a toddler lounge set as the anchor, BridgeVLM proposes age-appropriate complements
+                    (a day dress, a sock multipack, and slip-on clogs maintaining a playful palette). In row 2, for an infant
+                    footed onesie, the model retrieves nursery/layette essentials (security lovey, muslin cloth set, milestone
+                    blanket/sign, and fitted sheet) that match the woodland color/motif. Next, from a charcoal romper, BridgeVLM
+                    selects seasonal sleepwear and accessories (holiday bodysuit set, two-piece PJ outfit, fair-isle sleeper with
+                    hat, and knit booties) for cold-weather layering. With basic joggers as the anchor, recommendations cover
+                    everyday basics (bodysuit pack, sock multipack, soft slippers, and a bear-ear hoodie balancing base layers
+                    and outerwear). In the last row, for a floral swimsuit and sun hat, the model suggests warm-weather
+                    accessories (soft sandals, sunglasses, toy/teether links, and headbands) that preserve the pastel scheme.
+                    Overall, BridgeVLM yields coherent, child-appropriate sets that respect age/fit, maintain palette/motif
+                    consistency, and diversify across garment and accessory categories.
+                </p>
+            </div>
+
+            <div class="figure-block" style="margin-top:44px;">
+                <img src="figures/BridgeVLM%20Example4v2.png" alt="CTL Women's Wear" />
+                <p class="figure-caption">
+                    <strong>Figure 9.</strong> <strong>&#8220;Complete the Look&#8221; recommendations for women&#8217;s wear and jewelry.</strong>
+                    From a neutral hoodie, BridgeVLM assembles a relaxed streetwear set with olive joggers, a printed backpack,
+                    a compact shoulder bag, and lifestyle sneakers. Next, anchored on hammered teardrop earrings, the model
+                    builds an evening-ready ensemble (black slip dress, longline coat, crossbody bag, and platform loafers)
+                    that keeps the palette monochrome so the jewelry stands out. Given red shorts, BridgeVLM proposes casual
+                    staples (black tee, hobo bag, stud-earring multipack, and black sneakers) for a coordinated daytime look.
+                    For a strapless romper, it adds a denim jacket, delicate hoops, a crossbody, and block-heel sandals to
+                    elevate a warm-weather outfit. Starting from a burgundy puffer, the system recommends dark denim, a
+                    long-sleeve base layer, a silver bracelet, and chunky Chelsea boots for functional layering. Overall,
+                    the recommendations are type- and occasion-aware, maintain palette coherence, and diversify across
+                    garments, footwear, and accessories to produce cohesive outfits.
+                </p>
+            </div>
+
+            <div class="figure-block" style="margin-top:44px;">
+                <img src="figures/BridgeVLM%20Example2v2.png" alt="CTL Men's Everyday Wear" />
+                <p class="figure-caption">
+                    <strong>Figure 10.</strong> <strong>&#8220;Complete the Look&#8221; recommendations for men&#8217;s everyday wear pants and shorts.</strong>
+                    In the first row, BridgeVLM assembles a casual set with a basic tee, sport watch, and slip-on sneakers.
+                    With khaki cargo shorts as the anchor, the model returns warm-weather basics (a graphic tee, short-sleeve
+                    utility shirt, boxer-brief multipack, and crew socks). For dark denim, BridgeVLM adds everyday essentials
+                    (leather belt, underwear multipack, heather tee, and knit sneakers covering base layers and footwear).
+                    Anchored on black pants, the system composes a business-casual stack with a long-sleeve tee, sweater,
+                    puffer, and a wallet. Starting from light denim shorts, BridgeVLM proposes a workwear jacket, striped
+                    polo, leather-strap field watch, and trainers for a clean weekend fit. The recommendations are type- and
+                    occasion-aware, maintain palette coherence, and diversify across tops, accessories, and footwear to yield
+                    cohesive CTL sets.
+                </p>
             </div>
         </div>
     </section>
@@ -1275,6 +1314,65 @@
 <span class="vr">loss_ret</span> = <span class="fn">contrastive_loss</span>(<span class="vr">Sim</span>, <span class="fn">arange</span>(N))
 <span class="vr">loss_ce</span> = <span class="fn">VLM_cross_entropy_loss</span>(<span class="vr">input_ids</span>, <span class="vr">labels</span>)
 <span class="vr">loss</span> = &lambda;_ret * <span class="vr">loss_ret</span> + &lambda;_ce * <span class="vr">loss_ce</span>
+</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== Prompts ==================== -->
+    <section id="prompts">
+        <div class="container">
+            <h2 class="section-title">Prompts</h2>
+            <p style="text-align:center;color:#555;font-size:.95rem;margin-bottom:32px;">
+                Prompts used for inference and training data generation.
+            </p>
+
+            <h3 style="font-size:1.1rem;font-weight:600;color:#1a1a1a;margin-bottom:10px;">C.1 &nbsp;Complete the Look (CTL) Prompt</h3>
+            <p style="color:#555;font-size:.9rem;margin-bottom:12px;">The prompt used for the CTL task.</p>
+            <div class="pseudocode-box">
+                <pre>
+You are given an image of an item. Your task is to suggest 4 complementary products that would complete a cohesive styling.
+
+Return your response as a valid JSON object with the following format, and nothing else:
+{
+  "1": "Product 1",
+  "2": "Product 2",
+  "3": "Product 3",
+  "4": "Product 4"
+}
+
+Each product should match the style, color palette, and intended use of the main item.
+</pre>
+            </div>
+
+            <h3 style="font-size:1.1rem;font-weight:600;color:#1a1a1a;margin:40px 0 10px;">C.2 &nbsp;Similar Item (SI) Prompt</h3>
+            <p style="color:#555;font-size:.9rem;margin-bottom:12px;">The prompt used for the SI task.</p>
+            <div class="pseudocode-box">
+                <pre>
+You are given an image of an item. Your task is to suggest 1 similar product that share comparable style, function, or aesthetic qualities.
+
+Return your response as a valid JSON object with the following format, and nothing else:
+{
+  "1": "Product 1"
+}
+
+Each recommendation should have similar style elements, color schemes, or functional purposes as the main item.
+</pre>
+            </div>
+
+            <h3 style="font-size:1.1rem;font-weight:600;color:#1a1a1a;margin:40px 0 10px;">C.3 &nbsp;GPT-4o Summarization Prompt</h3>
+            <p style="color:#555;font-size:.9rem;margin-bottom:12px;">The prompt used to generate training dataset captions via GPT-4o.</p>
+            <div class="pseudocode-box">
+                <pre>
+You are a product expert. Generate a detailed caption describing this product image for visual search.
+
+Include: product type, colors, patterns, material, style, fit, design details, gender, and brand.
+
+Focus on visual attributes that help match similar products in embedding-based retrieval. Provide your answer in less than 10 words.
+
+Product info: {product_json}
+
+Return JSON format with key "caption"
 </pre>
             </div>
         </div>
